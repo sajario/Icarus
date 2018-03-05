@@ -41,7 +41,7 @@ CREATE TABLE student (
   userpass char(64) DEFAULT NULL,
   salt char(32) NOT NULL,
   email varchar(60) NOT NULL,
-  sessionid varchar(64) DEFAULT NULL,
+  sessionid varchar(52) DEFAULT NULL,
   usertype int(1) DEFAULT NULL,
   xp int(5),
   schoolid int(5) NOT NULL,
@@ -140,6 +140,5 @@ CREATE TABLE answercomp (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-
-
-
+INSERT INTO school VALUES (1,"UHI");
+INSERT INTO student values (1,"1","1","1","13c94bf9325490692b3ee8c65675fd8d38bca00f0466d5cb488fd6c9a181e95f","dc6686fbe6dddf78b87c4151e9298a1b","1@1.com","nm1smj0r7dr69bavepbj4373roudkbv5rgv0b2g5f6kuchaoo610",1,0,1);
