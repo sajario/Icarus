@@ -17,105 +17,37 @@
    </div>
    <div id="mainContent" class="col m8 offset-m2">
      <div class="row">
-       <div class="card col m2">
-         <div class="card-image">
-           <img src="css/img/profile.png">
+     <?php
+       include "php/functions.php";
+       $db = createConnection();
+       $query= "select firstname, lastname from student";
+       $stmt = $db->prepare($query);
+ 			 $stmt->execute();
+ 			 $stmt->store_result();
+       $stmt->bind_result($firstname,$lastname);
+       $i = 0;
+       while ($stmt->fetch()) {
+         echo '
+         <div class="card col m2">
+           <div class="card-image">
+             <img src="css/img/profile.png">
+           </div>
+           <div class="card-content">
+             <p>'.$firstname.' '.$lastname.'</p>
+           </div>
          </div>
-         <div class="card-content">
-           <p>First Last</p>
-         </div>
-       </div>
-       <div class="card col m2">
-         <div class="card-image">
-           <img src="css/img/profile.png">
-         </div>
-         <div class="card-content">
-           <p>First Last</p>
-         </div>
-       </div>
-       <div class="card col m2">
-         <div class="card-image">
-           <img src="css/img/profile.png">
-         </div>
-         <div class="card-content">
-           <p>First Last</p>
-         </div>
-       </div>
-       <div class="card col m2">
-         <div class="card-image">
-           <img src="css/img/profile.png">
-         </div>
-         <div class="card-content">
-           <p>First Last</p>
-         </div>
-       </div>
-       <div class="card col m2">
-         <div class="card-image">
-           <img src="css/img/profile.png">
-         </div>
-         <div class="card-content">
-           <p>First Last</p>
-         </div>
-       </div>
-       <div class="card col m2">
-         <div class="card-image">
-           <img src="css/img/profile.png">
-         </div>
-         <div class="card-content">
-           <p>First Last</p>
-         </div>
-       </div>
-     </div>
-     <div class="row">
-       <div class="card col m2">
-         <div class="card-image">
-           <img src="css/img/profile.png">
-         </div>
-         <div class="card-content">
-           <p>First Last</p>
-         </div>
-       </div>
-       <div class="card col m2">
-         <div class="card-image">
-           <img src="css/img/profile.png">
-         </div>
-         <div class="card-content">
-           <p>First Last</p>
-         </div>
-       </div>
-       <div class="card col m2">
-         <div class="card-image">
-           <img src="css/img/profile.png">
-         </div>
-         <div class="card-content">
-           <p>First Last</p>
-         </div>
-       </div>
-       <div class="card col m2">
-         <div class="card-image">
-           <img src="css/img/profile.png">
-         </div>
-         <div class="card-content">
-           <p>First Last</p>
-         </div>
-       </div>
-       <div class="card col m2">
-         <div class="card-image">
-           <img src="css/img/profile.png">
-         </div>
-         <div class="card-content">
-           <p>First Last</p>
-         </div>
-       </div>
-       <div class="card col m2">
-         <div class="card-image">
-           <img src="css/img/profile.png">
-         </div>
-         <div class="card-content">
-           <p>First Last</p>
-         </div>
-       </div>
-     </div>
+         ';
+         if ($i%5 == 0) {
+           echo '</div>';
+         } else if ($i%6 == 0) {
+           echo '<div class="row">';
+         }
+         $i++;
+       }
+       $stmt->close();
+       $db->close();
+     ?>
+    </div>
    </div>
   </div>
 </body>
