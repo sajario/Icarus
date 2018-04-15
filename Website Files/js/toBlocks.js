@@ -1,5 +1,5 @@
-function doStuff() {
-  let text = document.getElementById("text").value;
+function convertCode() {
+  let text = document.getElementById("text").innerHTML;
   let blocks = [];
   let condition = 0;
   let endCondition = false;
@@ -47,23 +47,17 @@ function toBlocks(blocks) {
       case 'i':
       case 'f':
       case 'w':
-        container.innerHTML+='<div class="jigsawHolder" id="draggable'+i+'"><img src="../Jigsaw Piece If.png"><p class="jigsaw if">'+blocks[i]+'</p></div>';
-        toDraggable("draggable"+i);
+        container.innerHTML+='<div class="jigsawHolder, draggable" data-type="if"><img src="css/img/Jigsaw Piece If.png" style="width:300px"><p class="jigsaw if" style="margin-top:-90px;font-family:Roboto;font-size:25px;color:white;padding-bottom:100px;padding-left:140px;">'+blocks[i]+'</p></div>';
         break;
       case '(':
-        container.innerHTML+='<div class="jigsawHolder" id="draggable'+i+'"><img src="../Jigsaw Piece Condition.png"><p class="jigsaw condition">'+blocks[i]+'</p></div>';
-        toDraggable("draggable"+i);
+        container.innerHTML+='<div class="jigsawHolder, draggable" data-type="condition"><img src="css/img/Jigsaw Piece Condition.png" style="width:300px"><p class="jigsaw condition" style="margin-top:-90px;font-family:Roboto;font-size:25px;color:white;padding-bottom:100px;padding-left:70px;">'+blocks[i]+'</p></div>';
         break;
       case '{':
-        container.innerHTML+='<div class="jigsawHolder" id="draggable'+i+'"><img src="../Jigsaw Piece Code.png"><p class="jigsaw condition">'+blocks[i]+'</p></div>';
-        toDraggable("draggable"+i);
+        container.innerHTML+='<div class="jigsawHolder, draggable" data-type="code"><img src="css/img/Jigsaw Piece Code.png" style="width:300px"><p class="jigsaw condition" style="margin-top:-90px;font-family:Roboto;font-size:25px;color:white;padding-bottom:100px;padding-left:70px;">'+blocks[i]+'</p></div>';
         break;
       default:
         console.log("Something went wrong, please try with different code");
         break;
     }
   }
-}
-function toDraggable(id) {
-  $(id).draggable({grid:[20,13]});
 }
