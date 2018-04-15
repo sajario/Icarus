@@ -10,24 +10,13 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
 </head>
 <body>
-  <nav>
-   <div class="nav-wrapper blue">
-     <a href="index.html" class="brand-logo">Icarus</a>
-     <ul id="nav-mobile" class="right hide-on-med-and-down">
-       <li><a href="classes.html">Classes</a></li>
-       <li><a href="exams.html">Exams</a></li>
-       <li><a href="Students.html">Students</a></li>
-       <li><a href="Analytics.html">Analytics</a></li>
-       <li><a href="Account.html">Account</a></li>
-     </ul>
-   </div>
- </nav>
- <div class="row">
+  <?php include 'includes/nav.php'; ?>
+  <div class="row">
    <div class="col m8 offset-m2">
      <h3>Account Settings</h3>
    </div>
- </div>
- <div class="container">
+  </div>
+  <div class="container">
    <div class="row">
      <div class="col m4 offset-m2 z-depth-1">
        <h5>Change Details</h5>
@@ -52,6 +41,6 @@
        <li class="collection-item">Example</li>
      </ul>
    </div>
- </div>
+  </div>
 </body>
 </html>
