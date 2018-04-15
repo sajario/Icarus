@@ -40,8 +40,11 @@ if(isset($_POST['email']) && isset($_POST['userpass'])){
 					$_SESSION['usertype'] = $usertype;
 					$_SESSION['firstname'] = $firstname;
 					$_SESSION['lastname'] = $lastname;
-					if ($usertype==2 || $usertype==1) {
-						header("location: account.html");
+					if ($usertype==1) {
+						header("location: exams.php");
+						exit();
+					} else if($usertype==2) {
+						header("location: classes.php");
 						exit();
 					} else {
 						header("location: logout.php");
