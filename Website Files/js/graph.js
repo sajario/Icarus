@@ -86,15 +86,15 @@ if (document.getElementById('graph').nodeName == "CANVAS") {
     //If the maximum views a site gets is 100, there is no need for the scale to go up to 1,000,000. If the maximum is 1,000,000 then a scale that goes up to 100 wouldn't fit everything on. This method allows for
     if(maxHits>=0 && maxHits<=100) {
       var scale = 10;
-    } else if (maxHits>=100 && maxHits<=1000) {
+    } else if (maxHits>100 && maxHits<=1000) {
       var scale = 100;
-    } else if (maxHits>=1000 && maxHits<=10000) {
+    } else if (maxHits>1000 && maxHits<=10000) {
       var scale = 1000;
-    } else if (maxHits>=10000 && maxHits<=100000) {
+    } else if (maxHits>10000 && maxHits<=100000) {
       var scale = 10000;
-    } else if (maxHits>=100000 && maxHits<=1000000) {
+    } else if (maxHits>100000 && maxHits<=1000000) {
       var scale = 100000;
-    } else if (maxHits>=1000000 && maxHits<=10000000) {
+    } else if (maxHits>1000000 && maxHits<=10000000) {
       var scale = 1000000;
     } else {
       console.log("Ask the developer to increase this");
@@ -132,9 +132,10 @@ if (document.getElementById('graph').nodeName == "CANVAS") {
   function plotPoints(pageHits,scale,spacing) {
     var xspace=20+spacing;
     switch(scale) {
+      case 10:
+        var scaleModifier = 2.36;
       case 100:
         var scaleModifier = 0.236;
-        console.log
         break;
       case 1000:
         var scaleModifier = 0.0236;
@@ -160,12 +161,12 @@ if (document.getElementById('graph').nodeName == "CANVAS") {
     for (i=0;i<=pageHits.length;i++) {
 
       var toLineX1 = xspace;
-      var toLineY1 = ((pageHits[i])*-1)*scaleModifier+260;
+      var toLineY1 = ((pageHits[i])*-1)*scaleModifier*10+260;
 
       xspace+=spacing;
 
       var toLineX2 = xspace;
-      var toLineY2 = ((pageHits[i+1])*-1)*scaleModifier+260;
+      var toLineY2 = ((pageHits[i+1])*-1)*scaleModifier*10+260;
 
       connectDots(toLineX1,toLineY1,toLineX2,toLineY2);
     }
