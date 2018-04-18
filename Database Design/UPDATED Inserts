@@ -1,0 +1,82 @@
+/*School*/
+INSERT INTO `school`(`schoolname`) VALUES ('ADMIN');
+INSERT INTO `school`(`schoolname`) VALUES ('Perth High School');
+INSERT INTO `school`(`schoolname`) VALUES ('Perth Grammar School');
+INSERT INTO `school`(`schoolname`) VALUES ('Balnacraig School');
+INSERT INTO `school`(`schoolname`) VALUES ('St Johns Academy');
+
+/*Student*/
+INSERT INTO `user`(`firstname`,`lastname`,`username`,`userpass`,`salt`,`email`,`sessionid`,`utype`,`xp`,`schoolid`)
+VALUES ('Sean','Breen','PumpedKicks',000,000,'sb@uhi.ac.uk',null,1,423,1);
+INSERT INTO `user`(`firstname`,`lastname`,`username`,`userpass`,`salt`,`email`,`sessionid`,`utype`,`xp`,`schoolid`)
+VALUES ('Marcin','Olesiak','SmoothOperator',000,000,'mo@uhi.ac.uk',null,1,368,2);
+INSERT INTO `user`(`firstname`,`lastname`,`username`,`userpass`,`salt`,`email`,`sessionid`,`utype`,`xp`,`schoolid`)
+VALUES ('Kieran','Plank','DadShoes',000,000,'kp@uhi.ac.uk',null,1,279,2);
+INSERT INTO `user`(`firstname`,`lastname`,`username`,`userpass`,`salt`,`email`,`sessionid`,`utype`,`xp`,`schoolid`)
+VALUES ('Sara','Pattinson','ShitShoes',000,000,'sp@uhi.ac.uk',null,0,123,3);
+INSERT INTO `user`(`firstname`,`lastname`,`username`,`userpass`,`salt`,`email`,`sessionid`,`utype`,`xp`,`schoolid`)
+VALUES ('Philip','Torggia','PT1',000,000,'pt1@uhi.ac.uk',null,2,0,4);
+INSERT INTO `user`(`firstname`,`lastname`,`username`,`userpass`,`salt`,`email`,`sessionid`,`utype`,`xp`,`schoolid`)
+VALUES ('Karen','Maynard','KM1',000,000,'km1@uhi.ac.uk',null,2,0,2);
+INSERT INTO `user`(`firstname`,`lastname`,`username`,`userpass`,`salt`,`email`,`sessionid`,`utype`,`xp`,`schoolid`)
+VALUES ('Erlich','Bauchman','coder',000,000,'coder@uhi.ac.uk',null,3,0,1);
+
+/*Module*/
+INSERT INTO `module`(`modulename`,`level`) VALUES ('Web Development','Higher');
+INSERT INTO `module`(`modulename`,`level`) VALUES ('Software Construction','Higher');
+INSERT INTO `module`(`modulename`,`level`) VALUES ('Networking','Higher');
+INSERT INTO `module`(`modulename`,`level`) VALUES ('Web Development','Advanced Higher');
+
+/*Unit*/
+INSERT INTO `unit`(`unitname`,`moduleid`)
+VALUES ('Analysis',1);
+INSERT INTO `unit`(`unitname`,`moduleid`)
+VALUES ('Development',1);
+INSERT INTO `unit`(`unitname`,`moduleid`)
+VALUES ('Implementation - HTML',1);
+INSERT INTO `unit`(`unitname`,`moduleid`)
+VALUES ('Implementation - CSS',1);
+INSERT INTO `unit`(`unitname`,`moduleid`)
+VALUES ('Implementation - JS',1);
+INSERT INTO `unit`(`unitname`,`moduleid`)
+VALUES ('Testing',1);
+INSERT INTO `unit`(`unitname`,`moduleid`)
+VALUES ('Evaluation',1);
+INSERT INTO `unit`(`unitname`,`moduleid`)
+VALUES ('Final',1);
+
+/*Class*/
+INSERT INTO `class`(`classname`,`teacherid`)
+VALUES('Higher 17-18',5);
+INSERT INTO `class`(`classname`,`teacherid`)
+VALUES('Advanced Higher 17-18',6);
+
+/*Class Assigned*/
+INSERT INTO `classassigned` (`classid`,`studentid`)
+VALUES (2, 1);
+INSERT INTO `classassigned` (`classid`,`studentid`)
+VALUES (1, 4);
+INSERT INTO `classassigned` (`classid`,`studentid`)
+VALUES (1, 2);
+INSERT INTO `classassigned` (`classid`,`studentid`)
+VALUES (1, 3);
+
+/*Module Assigned*/
+INSERT INTO `moduleassigned`(`moduleid`,`studentid`)
+VALUES(4,1);
+INSERT INTO `moduleassigned`(`moduleid`,`studentid`)
+VALUES(1,2);
+INSERT INTO `moduleassigned`(`moduleid`,`studentid`)
+VALUES(3,2);
+INSERT INTO `moduleassigned`(`moduleid`,`studentid`)
+VALUES(4,3);
+INSERT INTO `moduleassigned`(`moduleid`,`studentid`)
+VALUES(2,4);
+
+/*Question Type*/
+INSERT INTO `qtype`(`qtype`,`qdesc`)
+VALUES('Multiple Choice','These are options given to the students where one or more selections are correct');
+INSERT INTO `qtype`(`qtype`,`qdesc`)
+VALUES('Text Answers','These are text based answers which will need marked by a teacher before feedback can be given');
+
+
