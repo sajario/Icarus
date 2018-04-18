@@ -1,0 +1,140 @@
+drop table if exists `useranswer`;
+drop table if exists `answer`;
+drop table if exists `question`;
+drop table if exists `test`;
+drop table if exists `qtype`;
+drop table if exists `moduleassigned`;
+drop table if exists `classassigned`;
+drop table if exists `unit`;
+drop table if exists `module`;
+drop table if exists `class`;
+drop table if exists `user`;
+drop table if exists `school`;
+
+/*Sara Pattinson: updated 18/04/2018*/
+
+
+CREATE TABLE `school` (
+  `schoolid` int(5) NOT NULL AUTO_INCREMENT,
+  `schoolname` varchar(200) NOT NULL,
+  PRIMARY KEY (`schoolid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `user` (
+/*New combined table to hold admins, teachers and students ADMINS will have to have a school assigned but the inserts will have a school called admin (1)*/
+  `userid` int(5) NOT NULL AUTO_INCREMENT,
+  `firstname` varchar(50) NOT NULL,
+  `lastname` varchar(50) NOT NULL,
+  `username` varchar(20) NOT NULL,
+  `userpass` char(64) DEFAULT NULL,
+  `salt` char(32) NOT NULL,
+  `email` varchar(60) NOT NULL,
+  `sessionid` varchar(64) DEFAULT NULL,
+  `utype` int(5) NOT NULL,
+  `xp` int(5),
+  `schoolid` int(5) NOT NULL,
+  PRIMARY KEY (`userid`),
+  FOREIGN KEY (`schoolid`) REFERENCES `school` (`schoolid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `class` (
+/*NOTE that teacherid is linked to the same usertable as students ALL INCLUSIVE*/
+/*A teacher must be assigned to a class at point of creation*/
+  `classid` int(5) NOT NULL AUTO_INCREMENT,
+  `classname` varchar(50) NOT NULL,
+  `teacherid` int(5) NOT NULL,
+  PRIMARY KEY (`classid`,`teacherid`),
+  FOREIGN KEY (`teacherid`) REFERENCES `user` (`userid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `module` (
+/*Module is e.g Web Development, Software etc*/
+  `moduleid` int(5) NOT NULL AUTO_INCREMENT,
+  `modulename` varchar(50) NOT NULL,
+  `level` varchar(20) NOT NULL,
+  PRIMARY KEY (`moduleid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `unit` (
+/*Units are sections within a module e.g Analysis, Development etc*/
+  `unitid` int(5) NOT NULL AUTO_INCREMENT,
+  `unitname` varchar(50) NOT NULL,
+  `moduleid` int(5) NOT NULL,
+  PRIMARY KEY (`unitid`),
+  FOREIGN KEY (`moduleid`) REFERENCES `module` (`moduleid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*Students are assigned to a class*/
+CREATE TABLE `classassigned` (
+/*NOTE that studentid is linked to the same usertable as teachers ALL INCLUSIVE*/
+  `classid` int(5) NOT NULL AUTO_INCREMENT,
+  `studentid` int(5) NOT NULL,
+  PRIMARY KEY (`classid`,`studentid`),
+  FOREIGN KEY (`studentid`) REFERENCES `user` (`userid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*Modules are assigned to a student*/
+CREATE TABLE `moduleassigned` (
+/*NOTE that studentid is linked to the same usertable as teachers ALL INCLUSIVE*/
+  `moduleid` int(5) NOT NULL,
+  `studentid` int(5) NOT NULL,
+  PRIMARY KEY (`moduleid`,`studentid`),
+  FOREIGN KEY (`moduleid`) REFERENCES `module` (`moduleid`),
+  FOREIGN KEY (`studentid`) REFERENCES `user` (`userid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `qtype` (
+/*e.g Multiple Choice or Text Answers*/
+  `qtypeid` int(5) NOT NULL AUTO_INCREMENT,
+  `qtype` varchar(50) NOT NULL,
+  `qdesc` varchar(200) NOT NULL,
+  PRIMARY KEY (`qtypeid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `test` (
+/*Must retrieve a test through unit which is linked to the relevant module*/
+  `testid` int(5) NOT NULL AUTO_INCREMENT,
+  `qtypeid` int(5) NOT NULL,
+  `unitid` int(5) NOT NULL,
+  PRIMARY KEY (`testid`),
+  FOREIGN KEY (`qtypeid`) REFERENCES `qtype` (`qtypeid`),
+  FOREIGN KEY (`unitid`) REFERENCES `unit` (`unitid`) 
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE `question` (
+/*Question bank linked to specific test*/
+  `questionid` int(5) NOT NULL AUTO_INCREMENT,
+  `questiontext` varchar(255) NOT NULL,
+  `imageurl` varchar(255) NULL,
+  `testid` int(5) NOT NULL,
+  PRIMARY KEY (`questionid`),
+  FOREIGN KEY (`testid`) REFERENCES `test` (`testid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `answer` (
+/*record for each multiple choice answer ie multiple record for a single question*/
+  `answerid` int(5) NOT NULL AUTO_INCREMENT,
+  `validanswer` varchar(255),
+  `mchoice` varchar(5),
+  `correctTF` boolean NOT NULL,
+  `imageurl` varchar(255) NULL,
+  `questionid` int(5) NOT NULL,
+  PRIMARY KEY (`answerid`),
+  FOREIGN KEY (`questionid`) REFERENCES `question` (`questionid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `useranswer` (
+/*saving of student answer, comparison will now take place in code not in an extra table*/
+  `useranswerid` int(5) NOT NULL AUTO_INCREMENT,
+  `questionid` int(5) NOT NULL,
+  `studentid` int(5) NOT NULL,
+  `time` datetime NOT NULL,
+  `useranswer` varchar(255),
+  `usermchoice` varchar(5),
+  `timestamp` datetime null,
+  PRIMARY KEY (`useranswerid`),
+  FOREIGN KEY (`questionid`) REFERENCES `question` (`questionid`),
+  FOREIGN KEY (`studentid`) REFERENCES `user` (`userid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
