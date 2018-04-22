@@ -1,0 +1,167 @@
+/*Marcin*/
+
+/*logout.php*/
+	/*line 9:update student table after student/user is log out from session*/
+    update user set sessionid='a' where userid=? and userid=?;
+    
+/*xxAddTeacher.php*/
+	/*line 30:find did teacher already exist in a database before will be added*/
+    select userid from user where firstName = ? and lastName= ? and schoolid = ? and utype = 2;
+    /*added in usertype in case there is another person with the same name as a student or something*/
+    
+    /*line 41: insert new teacher data to a database */
+	INSERT INTO `user`(`firstname`,`lastname`,`username`,`userpass`,`salt`,`email`,`sessionid`,`utype`,`xp`,`schoolid`) VALUES (?,?,?,?,?,?,?,2,?,?);
+    
+/*xaddModule.php*/
+	/*line43: find did module which one we try added is already exist*/
+    select moduleid from module where  `modulename`=? and `level`=?;
+    /*level is higher or advanced higher so need to be reflected here because you will have web development for example at both levels*/
+    /*level also seems to be a protected word so have added ``*/
+    
+    /*line 55:insert new module details to a database*/
+	INSERT INTO module(`modulename`,`level`) VALUES (?,?);
+
+/*addTeacher.php*/
+	/* line 27:select school details (id and name) for add a teacher to specific school */
+	select schoolid,schoolname from school;
+    
+/*addStudent.php*/
+	/*line 32: selected all classes where specific teacher learn(that information is needed for add a student to a specific class)*/
+	select classid,classname from class where teacherid=?;
+    
+/*Sean*/
+
+/*RegisterResult.php*/
+	/*Line 30: Check if email exists*/
+	select email from user where email=?;
+
+	/*Line 41: Insert data for new user*/
+	INSERT INTO `user`(`firstname`,`lastname`,`username`,`userpass`,`salt`,`email`,`sessionid`,`utype`,`xp`,`schoolid`) VALUES (?,?,?,?,?,?,?,?,?,?);
+    
+/*Login.php*/
+	/*Line 11: Select user info for session variables*/
+	select userid, userpass, salt, firstname, lastname, utype from user where email=?;
+
+	/*Line 31: Update session id for user*/
+	update user set sessionid=? where userid=?;
+
+/*Classes.php*/
+	/*Line 23: Select all classes to display (Could be changed to be specific to logged in teacher)*/
+	select classid,classname from class where teacherid=?;
+    select classid,classname from class;
+    
+	/*Line 47: Select firstname and surname for all users in given class (Test data)*/
+		/*All*/
+		select firstname, lastname from user inner join classassigned on user.userid = classassigned.studentid where classid = ?;
+		/*By teacher*/
+		select firstname, lastname from user inner join classassigned on user.userid = classassigned.studentid inner join class on classassigned.classid = class.classid where (class.teacherid = ? and  class.classid = ?);
+    
+/*Students.php*/
+	/*Line 23:Select all students*/
+	select firstname, lastname from user where utype = 1;
+
+/*Analytics.php*/
+	/*Line 23: Select all classes (Could be changed to be specific to logged in teacher) to show in sidebar*/
+	select classid from class;
+	select classid from class where teacherid=?;
+    select classname from class;
+    select classname from class where teacherid=?;
+    
+    /*Line 51: Sum of all correct answers for a specific question on a specific test (To be used for piechart)*/
+    /*split down to search for all the questions in a test perhaps to create a drop down or simply use record set in php*/
+    select questionid, questiontext from question where testid=?;
+    /*then use the qestion id returned from the record set or dropdown to get the number of students for that question*/
+		/*Correct*/
+		select count(studentid) from useranswer where (questionid = 1 and satisfactoryTF = true);
+		/*Incorrect*/
+		select count(studentid) from useranswer where (questionid = 1 and satisfactoryTF = false);
+		/*Total*/
+		select count(studentid) from useranswer where questionid = 1;
+    
+	/*Line 73: Number of questions for a specific exam (To be used for maths in php code for graphs)*/
+	select count(questionid) from question where testid = 1;
+
+	/*Line 91: Used to calculate number of correct answers for each person who has done the test (Uses php variable for questionID)*/
+		/*Correct*/
+		select studentid, count(satisfactoryTF) from useranswer inner join question on useranswer.questionid = question.questionid where (satisfactoryTF = true and testid = ?);
+		/*Incorrect*/
+		select studentid, count(satisfactoryTF) from useranswer inner join question on useranswer.questionid = question.questionid where (satisfactoryTF = false and testid = ?);
+		/*Total*/
+		select studentid, count(satisfactoryTF) from useranswer inner join question on useranswer.questionid = question.questionid where testid = ?;
+
+
+
+/*Requests*/
+
+/*list all questions for a specific test*/
+	select * from question where testid = ?;
+/*insert the results*/
+	/*As discussed in meeting check of satisfactory answer is done in the code and should have been done before this insert so it can be inserted with the rest of the details*/
+	INSERT INTO `useranswer` (`useranswerid`,`questionid`,`studentid`,`time`,`useranswer`,`usermchoice`,`satisfactoryTF`,`timestamp`)VALUES(?,?,?,?,?,?,?,?);
+    
+/*list all exams taken/started by a specific user - NOTE not assigned but taken/started*/
+	select test.testid, module.modulename, unit.unitname 
+    from test 
+    inner join unit on unit.unitid = test.unitid 
+    inner join module on module.moduleid = unit.moduleid 
+    inner join question on question.testid = test.testid 
+    inner join useranswer on question.questionid = useranswer.questionid
+    where useranswer.studentid=?;
+
+/*list all tests for a specific module so a student knows what tests they have to take each unit has 1 test*/
+	select modulename, unitname, `level` from unit 
+    inner join module on module.moduleid = unit.moduleid 
+    inner join moduleassigned on moduleassigned.moduleid = unit.moduleid 
+    where moduleassigned.studentid = ?;
+    
+/*list all results from a specific exam for specific user*/
+		/*store below in variables*/
+		/*Correct*/
+			select studentid, count(satisfactoryTF) from useranswer inner join question on useranswer.questionid = question.questionid where (satisfactoryTF = true and testid = ? and studentid = ?);
+		/*Total*/
+			select studentid, count(satisfactoryTF) from useranswer inner join question on useranswer.questionid = question.questionid where (testid = ? and studentid = ?);
+		/*(correct/total)*100 = % grade*/
+            
+/*list correct results for a specific exam*/
+/*Not sure what you are asking here...I'm gonna guess*/
+    /*List all correct answers for specific exam? - Change * to whatever you need*/
+		select * from answer inner join question on answer.questionid = question.questionid where (testid = ? and correctTF = true);
+	/*List number of correct answers for specific test for each student*/
+		select studentid, count(satisfactoryTF) from useranswer inner join question on useranswer.questionid = question.questionid where (satisfactoryTF = true and testid = ?);
+    
+/*list all scores for all exams from a specific user*/
+	/*I have done this by module just as they will more than likely have more than one module asigned*/
+		/*Correct*/
+		select count(satisfactoryTF) from useranswer inner join question on useranswer.questionid = question.questionid where (satisfactoryTF = true and studentid = ? and testid in (
+		select test.testid 
+		from test 
+		inner join unit on unit.unitid = test.unitid 
+		inner join module on module.moduleid = unit.moduleid 
+		inner join question on question.testid = test.testid 
+		where module.moduleid=?
+		));
+
+/*list all results from a specific exam for specific class*/
+	/*Seperates*/
+		/*1. Set Student Record Set for specific class or teacher*/
+			select userid from user inner join classassigned on user.userid = classassigned.studentid inner join class on classassigned.classid = class.classid where (class.classid = ?);
+			/*two queries and results need to go into variables to calculate (correctanswers/totalanswers)*100 - specific testid and user needed*/
+		/*2. use above in a loop with student id record set to list all student results for a specific test in a specific class*/
+			/*store below in variables*/
+            /*Correct*/
+			select studentid, count(satisfactoryTF) from useranswer inner join question on useranswer.questionid = question.questionid where (satisfactoryTF = true and testid = ? and studentid = ?);
+			/*Total*/
+			select studentid, count(satisfactoryTF) from useranswer inner join question on useranswer.questionid = question.questionid where (testid = ? and studentid = ?);
+            /*(correct/total)*100 = % grade*/
+            
+	/*Without Recordset*/
+		/*store below in variables*/
+            /*Correct*/
+				select studentid, count(satisfactoryTF) from useranswer inner join question on useranswer.questionid = question.questionid where (satisfactoryTF = true and testid = ? and studentid in (select userid from user inner join classassigned on user.userid = classassigned.studentid inner join class on classassigned.classid = class.classid where (class.classid = ?)));
+			/*Total*/
+				select studentid, count(satisfactoryTF) from useranswer inner join question on useranswer.questionid = question.questionid where (testid = ? and studentid in (select userid from user inner join classassigned on user.userid = classassigned.studentid inner join class on classassigned.classid = class.classid where (class.classid = ?)));
+			/*(correct/total)*100 = % grade*/
+
+
+
+    
