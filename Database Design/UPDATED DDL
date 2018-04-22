@@ -11,7 +11,7 @@ drop table if exists `class`;
 drop table if exists `user`;
 drop table if exists `school`;
 
-/*Sara Pattinson: updated 18/04/2018*/
+/*Sara Pattinson: updated 22/04/2018*/
 
 
 CREATE TABLE `school` (
@@ -27,11 +27,11 @@ CREATE TABLE `user` (
   `lastname` varchar(50) NOT NULL,
   `username` varchar(20) NOT NULL,
   `userpass` char(64) DEFAULT NULL,
-  `salt` char(32) NOT NULL,
+  `salt` char(32) DEFAULT NULL,
   `email` varchar(60) NOT NULL,
   `sessionid` varchar(64) DEFAULT NULL,
   `utype` int(5) NOT NULL,
-  `xp` int(5),
+  `xp` int(5) DEFAULT NULL,
   `schoolid` int(5) NOT NULL,
   PRIMARY KEY (`userid`),
   FOREIGN KEY (`schoolid`) REFERENCES `school` (`schoolid`)
@@ -132,9 +132,11 @@ CREATE TABLE `useranswer` (
   `time` datetime NOT NULL,
   `useranswer` varchar(255),
   `usermchoice` varchar(5),
+  `satisfactoryTF` boolean NOT NULL,
   `timestamp` datetime null,
   PRIMARY KEY (`useranswerid`),
   FOREIGN KEY (`questionid`) REFERENCES `question` (`questionid`),
   FOREIGN KEY (`studentid`) REFERENCES `user` (`userid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
